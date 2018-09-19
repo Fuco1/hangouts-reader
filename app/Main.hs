@@ -2,15 +2,11 @@
 
 module Main where
 
-import Hangouts.Parser
 import Hangouts.Format
 
-import Data.Aeson
-import Data.Maybe (fromMaybe)
-import Data.List (intercalate, sortOn, find)
+import Data.Aeson (decode)
 import qualified Data.ByteString.Lazy as B
-import Data.Time.Format
-import Data.Time
+import Data.Time (getCurrentTimeZone)
 import Data.Text.Prettyprint.Doc.Render.Text (putDoc)
 
 main :: IO ()
@@ -20,6 +16,5 @@ main = do
   let config = Config tz
   let convos = decode json
   case convos of
-    Just convos' -> do
-      putDoc $ format config convos'
+    Just convos' -> putDoc $ format config convos'
     Nothing -> putStrLn "error"
