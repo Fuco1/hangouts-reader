@@ -1,19 +1,21 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Lib
+module Hangouts.Parser
     (
         Participant(..)
       , Event(..)
       , Conversation(..)
       , Conversations(..)
+      , getParticipantName
     ) where
 
 import Control.Monad ((>=>))
 import Data.Aeson
 import Data.Aeson.Types
-import Data.Text
+import Data.Text hiding (find)
 import qualified Data.ByteString.Lazy as B
-
+import Data.Maybe (fromMaybe)
+import Data.List (find)
 import Data.Time.Clock.POSIX
 import Data.Time
 
@@ -37,6 +39,12 @@ data Conversation = Conversation {
 data Conversations = Conversations {
   conversations :: [Conversation]
   } deriving Show
+
+getParticipant :: String -> [Participant] -> Maybe Participant
+getParticipant chatId = find (\x -> participantId x == chatId)
+
+getParticipantName :: String -> [Participant] -> String
+getParticipantName chatId = fromMaybe "unknown" . (\p -> getParticipant chatId p >>= name)
 
 (@@) :: (FromJSON a) => Text -> Object -> Parser a
 path @@ obj = obj .: path
