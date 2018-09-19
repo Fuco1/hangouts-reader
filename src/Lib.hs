@@ -8,7 +8,7 @@ module Lib
       , Conversations(..)
     ) where
 
-import Control.Monad (foldM, (>=>))
+import Control.Monad ((>=>))
 import Data.Aeson
 import Data.Aeson.Types
 import Data.Text
