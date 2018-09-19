@@ -5,7 +5,7 @@ Little CLI utility for parsing Google Hanougts Takeout json data.
 # Installation
 
 Build with `stack install`.  This will install a system-wide binary
-`hangouts-reader-exe` if your stack `.bin` directory is on the
+`hangouts-reader` if your stack `.bin` directory is on the
 `$PATH`.  Otherwise refer to stack documentation.
 
 # Usage
@@ -13,13 +13,13 @@ Build with `stack install`.  This will install a system-wide binary
 The simplest way to use this is to pipe in the json data:
 
 ``` shell
-cat Hangouts.json | hangouts-reader-exe | less
+cat Hangouts.json | hangouts-reader | less
 ```
 
 You can also store the processed output in a file for faster access:
 
 ``` shell
-cat Hangouts.json | hangouts-reader-exe > hangouts-processed-data.txt
+cat Hangouts.json | hangouts-reader > hangouts-processed-data.txt
 ```
 
 The application provides several output formats listed below.

@@ -31,7 +31,7 @@ library:
   source-dirs: src
 
 executables:
-  hangouts-reader-exe:
+  hangouts-reader:
     main:                Main.hs
     source-dirs:         app
     ghc-options:
