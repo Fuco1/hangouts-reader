@@ -7,7 +7,6 @@ module Hangouts.Format.Line (
 import Hangouts.Format.Internal.Format
 import Hangouts.Parser
 import Data.Text.Prettyprint.Doc
-import Data.Text hiding (map)
 import Data.Maybe (fromMaybe)
 import Data.ByteString.Lazy as B hiding (map)
 import Data.List (sortOn)
