@@ -10,14 +10,12 @@ module Hangouts.Parser
     ) where
 
 import Control.Monad ((>=>))
-import Data.Aeson
 import Data.Aeson.Types
 import Data.Text hiding (find)
-import qualified Data.ByteString.Lazy as B
 import Data.Maybe (fromMaybe)
 import Data.List (find)
-import Data.Time.Clock.POSIX
-import Data.Time
+import Data.Time.Clock.POSIX (posixSecondsToUTCTime)
+import Data.Time (UTCTime)
 
 data Participant = Participant {
     name :: Maybe String
