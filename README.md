@@ -54,7 +54,7 @@ data file.  For example, if you want to print your conversation with
 Emily, use it as so:
 
 ``` shell
-./parse.sh Emily hangouts-line-data.txt
+./parse.sh Emily hangouts-processed-data.txt
 ```
 
 This assumes there is only one conversation where Emily is present,
