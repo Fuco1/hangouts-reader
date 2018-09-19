@@ -4,22 +4,13 @@ module Hangouts.Format.Line (
   format
   ) where
 
-import Hangouts.Format.Internal.Format (Config, formatTimestamp)
+import Hangouts.Format.Internal.Format
 import Hangouts.Parser
 import Data.Text.Prettyprint.Doc
 import Data.Text hiding (map)
 import Data.Maybe (fromMaybe)
 import Data.ByteString.Lazy as B hiding (map)
 import Data.List (sortOn)
-
-tab :: Doc a
-tab = "\t"
-
-(<++>) :: Doc a -> Doc a -> Doc a
-a <++> b = a <> tab <> b
-
-join :: Foldable t => Doc a -> t (Doc a) -> Doc a
-join separator = concatWith (surround separator)
 
 format :: Config -> Conversations -> Doc a
 format config convos = header convos <> hardline <> hardline
