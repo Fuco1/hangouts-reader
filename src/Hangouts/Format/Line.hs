@@ -1,18 +1,23 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 module Hangouts.Format.Line (
-  format
+  formatLine
   ) where
 
 import Hangouts.Format.Internal.Format
 import Hangouts.Parser
 import Data.Text.Prettyprint.Doc
+import Data.Text.Prettyprint.Doc.Render.Text (renderLazy)
+import Data.Text.Lazy (Text)
 import Data.Maybe (fromMaybe)
 import Data.ByteString.Lazy as B hiding (map)
 import Data.List (sortOn)
 
-format :: Config -> Conversations -> Doc a
-format config convos = header convos <> hardline <> hardline
+formatLine :: Config -> Conversations -> Text
+formatLine config convos = renderLazy . layoutPretty defaultLayoutOptions $
+  header convos
+  <> hardline
+  <> hardline
   <> vsep (map (formatConvo config) . conversations $ convos)
 
 header :: Conversations -> Doc a
