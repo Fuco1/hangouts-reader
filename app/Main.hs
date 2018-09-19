@@ -8,6 +8,7 @@ import Data.Maybe (fromMaybe)
 import Data.List (intercalate, sortOn, find)
 import qualified Data.ByteString.Lazy as B
 import Data.Time.Format
+import Data.Time
 
 printConversationParticipants :: [Conversation] -> IO ()
 printConversationParticipants = mapM_
@@ -19,15 +20,22 @@ printConvo c@Conversation {
   conversationId = id
   , participants = p
   , events = e
-  } = putStrLn $ (intercalate "\n" . map (formatEvent c) . sortOn time) e
+  } = do
+  tz <- getCurrentTimeZone
+  putStrLn $ (intercalate "\n" . map (formatEvent tz c) . sortOn time) e
 
-formatEvent :: Conversation -> Event -> String
-formatEvent Conversation {
+formatEvent :: TimeZone -> Conversation -> Event -> String
+formatEvent tz Conversation {
   conversationId = convId
   , participants = p
   } Event {senderId = senderId, time = time, text = Just text} =
-  convId ++ " [" ++ formatTime defaultTimeLocale "%c" time ++ "] " ++ (getParticipantName senderId p) ++ ": " ++ text
-formatEvent _ Event {text = Nothing} = ""
+  convId ++ " [" ++ formatTimestamp tz time ++ "] " ++ (getParticipantName senderId p) ++ ": " ++ text
+formatEvent _ _ Event {text = Nothing} = ""
+
+formatTimestamp :: TimeZone -> UTCTime -> String
+formatTimestamp tz time =
+  let local = utcToLocalTime tz time in
+    formatTime defaultTimeLocale "%c" local
 
 getParticipant :: String -> [Participant] -> Maybe Participant
 getParticipant chatId = find (\x -> participantId x == chatId)
