@@ -1,4 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE DeriveGeneric #-}
 
 module Hangouts.Parser
     (
@@ -8,6 +9,8 @@ module Hangouts.Parser
       , Conversations(..)
       , getParticipantName
     ) where
+
+import GHC.Generics
 
 import Control.Monad ((>=>))
 import Data.Aeson.Types
@@ -20,23 +23,28 @@ import Data.Time (UTCTime)
 data Participant = Participant {
     name :: Maybe String
   , participantId :: String
-  } deriving Show
+  } deriving (Show, Generic)
 
 data Event = Event {
    senderId :: String
    , time :: UTCTime
    , text :: Maybe String
-   } deriving Show
+   } deriving (Show, Generic)
 
 data Conversation = Conversation {
     conversationId :: String
   , participants :: [Participant]
   , events :: [Event]
-  } deriving Show
+  } deriving (Show, Generic)
 
 data Conversations = Conversations {
   conversations :: [Conversation]
-  } deriving Show
+  } deriving (Show, Generic)
+
+instance ToJSON Participant
+instance ToJSON Event
+instance ToJSON Conversation
+instance ToJSON Conversations
 
 getParticipant :: String -> [Participant] -> Maybe Participant
 getParticipant chatId = find (\x -> participantId x == chatId)

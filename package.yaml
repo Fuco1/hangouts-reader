@@ -25,6 +25,7 @@ dependencies:
 - text
 - time
 - prettyprinter >= 1.2.1
+- optparse-applicative >= 0.14.2
 
 library:
   source-dirs: src

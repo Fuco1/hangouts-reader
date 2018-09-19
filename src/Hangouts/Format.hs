@@ -1,7 +1,9 @@
 module Hangouts.Format (
   Config(..)
-  , L.format
+  , formatLine
+  , formatJson
   ) where
 
 import Hangouts.Format.Internal.Format (Config(..))
-import Hangouts.Format.Line as L
+import Hangouts.Format.Line (formatLine)
+import Hangouts.Format.Json (formatJson)
