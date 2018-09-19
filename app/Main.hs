@@ -5,7 +5,7 @@ module Main where
 import Lib
 import Data.Aeson
 import Data.Maybe (fromMaybe)
-import Data.List (intercalate, sortOn)
+import Data.List (intercalate, sortOn, find)
 import qualified Data.ByteString.Lazy as B
 import Data.Time.Format
 
@@ -15,16 +15,25 @@ printConversationParticipants = mapM_
       putStrLn $ id ++ ": " ++ formatParticipants p)
 
 printConvo :: Conversation -> IO ()
-printConvo Conversation {
+printConvo c@Conversation {
   conversationId = id
   , participants = p
   , events = e
-  } = putStrLn $ (intercalate "\n" . map (formatEvent id) . sortOn time ) e
+  } = putStrLn $ (intercalate "\n" . map (formatEvent c) . sortOn time) e
 
-formatEvent :: String -> Event -> String
-formatEvent convId Event {senderId = senderId, time = time, text = Just text} =
-  convId ++ " [" ++ formatTime defaultTimeLocale "%c" time ++ "] " ++ senderId ++ ": " ++ text
+formatEvent :: Conversation -> Event -> String
+formatEvent Conversation {
+  conversationId = convId
+  , participants = p
+  } Event {senderId = senderId, time = time, text = Just text} =
+  convId ++ " [" ++ formatTime defaultTimeLocale "%c" time ++ "] " ++ (getParticipantName senderId p) ++ ": " ++ text
 formatEvent _ Event {text = Nothing} = ""
+
+getParticipant :: String -> [Participant] -> Maybe Participant
+getParticipant chatId = find (\x -> participantId x == chatId)
+
+getParticipantName :: String -> [Participant] -> String
+getParticipantName chatId = fromMaybe "unknown" . (\p -> getParticipant chatId p >>= name)
 
 formatParticipants :: [Participant] -> String
 formatParticipants = intercalate ", " . map (fromMaybe "unknown" . name)
